@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인페이지</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    <style>
+        /*모든 태그에 적용*/
+        *{
+            font-family: 'Nanum Pen Script', cursive;
+        }
+        .mytitle {
+            background-color: green;
+            width: 300px;
+            height: 200px;
+            color: white;
+            text-align: center;
+            /*아래 세줄은 항상 같이 다닌다.*/
+            background-image: url("https://www.ancient-origins.net/sites/default/files/field/image/Agesilaus-II-cover.jpg");
+            background-size: cover;
+            background-position: center;
+            /*모서리 둥글게*/
+            border-radius: 10px;
+            padding-top: 20px;
+        }
+
+        .mybtn {
+            /*padding: 내 안으로 여백*/
+            /*margin: 내 바깥으로 여백, 상 우 하 좌*/
+            width: 100px;
+            margin: auto;
+            display: block;
+        }
+
+        .wrap {
+            /*div가 width가 정해져 있지 않으면 전체를 채우고 있기 때문에 옮길 곳이 없음*/
+            width:  300px;
+            margin: auto;
+        }
+
+        .red-font{
+            color: red;
+            font-size: 36px;
+        }
+    </style>
+</head>
+<body>
+    <div class ="wrap">
+        <div class="mytitle">
+            <h1>로그인 페이지</h1>
+            <h5>아이디, 패스워드를 입력해주세요.</h5>
+        </div>
+
+        <p>ID: <input type="text"/></p>
+        <p>PW: <input type="text"/></p>
+        <!--클래스 중첩시, 띄어서 써주면 된다.-->
+        <button class="mybtn red-font">로그인하기</button>
+    </div>
+</body>
+</html>

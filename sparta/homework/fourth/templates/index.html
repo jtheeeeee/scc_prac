@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <style>
+        *{
+            font-family: 'Nanum Pen Script', cursive;
+        }
+        .item-img {
+            width: 500px;
+            height: 300px;
+            background-image: url("https://infarm.kr/web/product/big/202107/c71823a85a759a74eebfee8443d4bc0a.jpg");
+            background-position: center;
+            background-size: cover;
+        }
+        .wrap {
+            margin: auto;
+            width: 500px;
+        }
+
+        .price-text {
+            font-size: 25px;
+        }
+
+       .item-desc{
+           margin: 20px 0px 20px 0px;
+       }
+
+        .btn {
+            display: block;
+            margin: auto
+        }
+        .exchange-rate{
+            color:blue;
+            margin-bottom: 20px;
+        }
+        .table{
+            margin-top: 20px;
+        }
+    </style>
+    <title>뽀쑹아 팝니다.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+    <script>
+        $(document).ready(function(){
+            get_rate();
+            order_listing();
+        });
+
+        function get_rate(){
+            $.ajax({
+                type: "GET",
+                url: "http://spartacodingclub.shop/sparta_api/rate",
+                data: {},
+                success: function (response) {
+                    let rate = response['rate']
+
+                    $('#exchange_rate').append(rate)
+                }
+
+            })
+        }
+
+        function order() {
+            let name = $('#order-name').val()
+            let count = $('#inputGroupSelect01').val()
+            let address = $('#order-address').val()
+            let phone = $('#phone').val()
+            $.ajax({
+                type: "POST",
+                url: "/order",
+                data: {name_give:name,count_give:count, address_give:address, phone_give:phone},
+                success: function (response) { // 성공하면
+                    alert(name+'님 복숭아 '+count+'개가 주문되었습니다!')
+                    window.location.reload()
+                }
+            })
+        }
+
+        function order_listing() {
+            // 주문목록 보기 API 연결
+            $.ajax({
+                type: "GET",
+                url: "/order?sample_give=샘플데이터",
+                data: {},
+                success: function (response) {
+                    let orders = response['orders']
+                    for (let i =0; i<orders.length; i++){
+                        let name = orders[i]['name']
+                        let count = orders[i]['count']
+                        let address = orders[i]['address']
+                        let phone = orders[i]['phone']
+                        console.log(name, count, address, phone)
+                        let temp_html =`<tr>
+                                          <th scope="row">${name}</th>
+                                          <td>${count}</td>
+                                          <td>${address}</td>
+                                          <td>${phone}</td>
+                                        </tr>
+                        `
+
+                        $('#order-box').append(temp_html)
+
+                    }
+                }
+            })
+        }
+
+
+    </script>
+</head>
+
+<body>
+<div class="wrap">
+    <div class="item-img"></div>
+    <div class="item-desc">
+        <h1>복숭아를 팝니다.<span class="price-text"> 가격: 2000원/개</span></h1>
+        <p>이 뽀쑹아는 아주 예쁘고 맛이 좋습니다. 복숭아는 딱딱한 복숭아가 체고지! 물복은 저리가거라!</p>
+    </div>
+    <div class="exchange-rate">
+        <p id="exchange_rate">달러-원 환율: </p>
+
+    </div>
+    <div class="input-group">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">주문자 이름</span>
+            </div>
+            <input type="text" id ='order-name' class="form-control" placeholder="" aria-label="Username"
+                   aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">수량</label>
+            </div>
+            <select class="custom-select" id="inputGroupSelect01">
+                <option selected>---수량을 선택하세요---</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">주소</span>
+            </div>
+            <input type="text" id = 'order-address' class="form-control" placeholder="" aria-label="Username"
+                   aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">전화번호</span>
+            </div>
+            <input type="text" id ='phone'class="form-control" placeholder="" aria-label="Username"
+                   aria-describedby="basic-addon1">
+        </div>
+        <button onclick="order()" type="button" class="btn btn-primary">주문하기</button>
+    </div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">이름</th>
+      <th scope="col">수량</th>
+      <th scope="col">주소</th>
+      <th scope="col">전화번호</th>
+    </tr>
+  </thead>
+  <tbody id="order-box">
+
+  </tbody>
+</table>
+
+</div>
+
+
+</body>
+
+</html>
